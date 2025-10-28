@@ -1,0 +1,49 @@
+{
+  "name": "Ruby & PostgreSQL Development",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "shopify.ruby-lsp",
+        "koichisasada.vscode-rdbg",
+        "ms-vscode.vscode-json",
+        "bradlc.vscode-tailwindcss",
+        "formulahendry.auto-rename-tag",
+        "esbenp.prettier-vscode",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg"
+      ],
+      "settings": {
+        "ruby.useBundler": true,
+        "ruby.lint": {
+          "rubocop": true
+        },
+        "sqltools.connections": [
+          {
+            "name": "PostgreSQL Dev",
+            "driver": "PostgreSQL",
+            "server": "db",
+            "port": 5432,
+            "database": "development",
+            "username": "postgres",
+            "password": "password"
+          }
+        ]
+      }
+    }
+  },
+
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "forwardPorts": [3000, 5432],
+
+  "postCreateCommand": "if [ -f Gemfile ]; then until nc -z db 5432; do echo 'Waiting for database...'; sleep 2; done; bundle install && rails db:create db:migrate; else echo 'No Gemfile found - skipping bundle and db setup'; fi",
+
+  "remoteUser": "vscode"
+}
